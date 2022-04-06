@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #form {
+            margin: 50px;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <form id="form">
+        <input type="file" name="file" id="file">
+        <input type="submit" value="submit it">
+    </form>
+    <p id="title"></p>
+    <script>
+
+        const form = document.getElementById('form')
+        const file = document.getElementById('file')
+        const title = document.getElementById('title')
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const thefile = file.value
+            const ext = thefile.split('.').pop() //pops first before . and return second part after .
+
+            if (ext == 'json') {
+                const svg = document.querySelector('svg')
+                if (svg) svg.remove()
+
+                title.innerText = 'Loading data from ' + ext + ' file'
+                d3.json(file.files[0].name).then(load)
+            }
+            else if (ext == 'csv') {
+                const svg = document.querySelector('svg')
+                if (svg) svg.remove()
+
+                title.innerText = 'Loading data from ' + ext + ' file'
+                d3.csv(file.files[0].name).then(load)
+            }
+            else if (ext == 'tsv') {
+                const svg = document.querySelector('svg')
+                if (svg) svg.remove()
+
+                title.innerText = 'Loading data from ' + ext + ' file'
+                d3.tsv(file.files[0].name).then(load)
+            }
+            else if (ext == 'txt') {
+                const svg = document.querySelector('svg')
+                if (svg) svg.remove()
+
+                title.innerText = 'Loading data from ' + ext + ' file'
+                d3.dsv(" ",file.files[0].name).then(load)
+            }
+            else if (ext == 'xml') {
+                const svg = document.querySelector('svg')
+                if (svg) svg.remove()
+
+                title.innerText = 'Loading data from ' + ext + ' file'
+
+                d3.xml(file.files[0].name).then(function (xml) {
+
+                    var region = d3.select(xml).selectAll("region")
+                    const regionNL = region._groups[0]
+                    const arr = Array.from(regionNL)
+                    const newRegion = arr.map((e)=> e.innerHTML)
+
+                    var sales = d3.select(xml).selectAll("sales")
+                    const salesNL = sales._groups[0]
+                    const r = Array.from(salesNL)
+                    const newSales = r.map((e)=> e.innerHTML)
+
+                    let xmldata = []
+                    for (let i = 0; i < newRegion.length; i++){
+                        xmldata.push({region:newRegion[i],sales: newSales[i] })
+                    }
+                    load(xmldata)
+
+                })
+            }
+        })
+
+        function load(data) {
+            const svg = d3.select('body')
+                .append('svg')
+                .attr('width', 500)
+                .attr('height', 500)
+
+            svg.selectAll('rect')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('width', (d) => d.sales)
+                .attr('height', 50)
+                .attr('y', (d, i) => i * 55)
+                .attr('x', 55)
+                .attr('fill', 'blue')
+
+            svg.selectAll('text')
+                .data(data)
+                .enter()
+                .append('text')
+                .attr('fill', 'black')
+                .attr('y', (d, i) => i * 55 + 25)
+                .text((d) => d.region)
+        }
+    </script>
+</body>
+
+</html

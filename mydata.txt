@@ -1,0 +1,5 @@
+region sales
+south 10
+east 40
+west 60
+north 20

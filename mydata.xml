@@ -1,0 +1,24 @@
+<data>
+<row>
+    <region>south</region>
+    <sales>50</sales>
+</row>
+<row>
+    <region>east</region>
+    <sales>10</sales>
+</row>
+<row>
+    <region>west</region>
+    <sales>50</sales>
+</row>
+<row>
+    <region>north</region>
+    <sales>10</sales>
+</row>
+</data>
+<!-- <data>
+<value>10</value>
+<value>30</value>
+<value>50</value>
+<value>60</value>
+</data> -->
